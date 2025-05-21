@@ -1,5 +1,14 @@
+import Navbar from "./components/Navbar";
+import { BrowserRouter } from "react-router-dom";
+
 const App = () => {
-  return <div></div>;
+  return (
+    <div>
+      <BrowserRouter>
+        <Navbar />
+      </BrowserRouter>
+    </div>
+  );
 };
 
 export default App;
