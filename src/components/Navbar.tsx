@@ -49,7 +49,7 @@ const Navbar = () => {
                       ${
                         item.current
                           ? "text-yellow-400"
-                          : "text-gray-300 hover:text-yellow-400"
+                          : "text-white hover:text-yellow-400"
                       }
                     `}
                   >
