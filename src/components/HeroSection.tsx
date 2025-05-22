@@ -24,7 +24,7 @@ const HeroSection = () => {
         objectFit="cover"
         zIndex={-1}
       >
-        <source src="/herovideo.mp4" type="video/mp4" />
+        <source src="/videointro.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </Box>
 
@@ -40,6 +40,7 @@ const HeroSection = () => {
             size="2xl"
             color="white"
             textShadow="0 0 10px rgba(0,0,0,0.7)"
+            fontFamily="monospace"
           >
             Welcome to PG Events
           </Heading>
