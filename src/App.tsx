@@ -1,7 +1,9 @@
+import About from "./components/About";
+import Contact from "./components/Contact";
 import HeroSection from "./components/HeroSection";
 import Navbar from "./components/Navbar";
-import { ChakraProvider } from "@chakra-ui/react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Services from "./components/Services";
 // import theme from "./theme";
 
 const App = () => {
@@ -9,10 +11,15 @@ const App = () => {
     <div>
       <BrowserRouter>
         <Navbar />
+        {/* <HeroSection /> */}
+
+        <Routes>
+          <Route path="/" element={<HeroSection />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/services" element={<Services />} />
+        </Routes>
       </BrowserRouter>
-      <ChakraProvider resetCSS={false}>
-        <HeroSection />
-      </ChakraProvider>
     </div>
   );
 };
