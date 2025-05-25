@@ -1,9 +1,9 @@
-import About from "./components/About";
-import Contact from "./components/Contact";
-import HeroSection from "./components/HeroSection";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import HeroSection from "./pages/HeroSection";
 import Navbar from "./components/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Services from "./components/Services";
+import Services from "./pages/Services";
 // import theme from "./theme";
 
 const App = () => {
