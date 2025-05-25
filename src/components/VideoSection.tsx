@@ -27,3 +27,47 @@ const VideoSection = () => {
 };
 
 export default VideoSection;
+
+// import React from "react";
+// import { Box, Heading, SimpleGrid } from "@chakra-ui/react";
+
+// const videos = [
+//   "/videointro.mp4",
+//   // "/videos/sample2.mp4",
+//   // "/videos/sample3.mp4",
+// ];
+
+// export default function VideoSection() {
+//   return (
+//     <Box maxW="6xl" mx="auto" px={4} py={10}>
+//       <Heading as="h2" size="xl" mb={6} textAlign="center">
+//         Local Video Gallery
+//       </Heading>
+
+//       <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={6}>
+//         {videos.map((src, index) => (
+//           <Box
+//             key={index}
+//             overflow="hidden"
+//             borderRadius="lg"
+//             boxShadow="md"
+//             bg="black"
+//           >
+//             <video
+//               controls
+//               preload="metadata"
+//               style={{
+//                 width: "100%",
+//                 height: "auto",
+//                 borderRadius: "10px",
+//               }}
+//             >
+//               <source src={src} type="video/mp4" />
+//               Your browser does not support the video tag.
+//             </video>
+//           </Box>
+//         ))}
+//       </SimpleGrid>
+//     </Box>
+//   );
+// }
