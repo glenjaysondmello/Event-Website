@@ -5,3 +5,7 @@
 * {
   font-family: "JetBrains Mono", monospace;
 }
+
+.zoom-container:hover .zoom-img {
+  transform: scale(1.05);
+}
