@@ -77,7 +77,7 @@ const Contact = () => {
   };
 
   return (
-    <Box px={4} py={10} maxW="6xl" mx="auto">
+    <Box px={4} py={10} maxW="6xl" mx="auto" marginTop={10}>
       <Text fontSize="3xl" fontWeight="bold" mb={4}>
         Contact Us
       </Text>

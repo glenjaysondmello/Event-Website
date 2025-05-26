@@ -7,10 +7,12 @@ import {
   Container,
 } from "@chakra-ui/react";
 import VideoGallery from "../components/VideoGallary";
+import ImageCarousel from "../components/ImageCarousel";
+import Carousel3D from "../components/ImageCarousel";
 
 const HeroSection = () => {
   return (
-    <>
+    <Box marginTop={14}>
       <Box position="relative" height="100vh" overflow="hidden">
         <Box
           as="video"
@@ -65,8 +67,9 @@ const HeroSection = () => {
           </VStack>
         </Container>
       </Box>
+      <Carousel3D />
       <VideoGallery />
-    </>
+    </Box>
   );
 };
 

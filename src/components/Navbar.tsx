@@ -1,8 +1,20 @@
-import { Disclosure, Transition } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/16/solid";
+import {
+  Box,
+  Flex,
+  HStack,
+  IconButton,
+  Image,
+  Text,
+  VStack,
+  Collapse,
+  useDisclosure,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
+  const { isOpen, onToggle } = useDisclosure();
   const location = useLocation();
 
   const navigation = [
@@ -20,94 +32,105 @@ const Navbar = () => {
     },
   ];
 
+  const navBg = useColorModeValue("gray.900", "gray.800");
+  const navText = useColorModeValue("white", "white");
+
   return (
-    <Disclosure as="nav" className="bg-black shadow-lg">
-      {({ open }) => (
-        <>
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 justify-between">
-              <div className="flex items-center">
-                <Link
-                  to="/"
-                  className="flex items-center gap-2 text-2xl font-extrabold tracking-tight"
+    <Box bg={navBg} px={4} position="fixed" w="100%" top="0" zIndex="999">
+      <Flex
+        h={16}
+        alignItems="center"
+        justifyContent="space-between"
+        maxW="7xl"
+        mx="auto"
+      >
+        <Link to="/">
+          <Flex align="center" gap={2}>
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              boxSize="50px"
+              objectFit="contain"
+            />
+            <Box
+              w={2}
+              h={2}
+              bg="yellow.400"
+              borderRadius="full"
+              animation="pulse 2s infinite"
+            />
+          </Flex>
+        </Link>
+
+        {/* Desktop Nav */}
+        <HStack spacing={8} display={{ base: "none", sm: "flex" }}>
+          {navigation.map((item) => (
+            <Link key={item.name} to={item.href}>
+              <Text
+                position="relative"
+                fontSize="sm"
+                fontWeight="medium"
+                color={item.current ? "yellow.400" : navText}
+                _hover={{ color: "yellow.400" }}
+              >
+                {item.name}
+
+                {item.current && (
+                  <Box
+                    position="absolute"
+                    bottom={-1}
+                    left={0}
+                    right={0}
+                    height="2px"
+                    bg="yellow.400"
+                    borderRadius="md"
+                  />
+                )}
+              </Text>
+            </Link>
+          ))}
+        </HStack>
+
+        {/* Mobile Button */}
+        <IconButton
+          size="md"
+          icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+          aria-label="Open Menu"
+          display={{ sm: "none" }}
+          onClick={onToggle}
+          color="gray.300"
+          _hover={{ color: "yellow.400", bg: "gray.700" }}
+        />
+      </Flex>
+
+      {/* Mobile Menu */}
+      <Collapse in={isOpen} animateOpacity>
+        <Box pb={4} display={{ sm: "none" }} bg="gray.900">
+          <VStack align="start" spacing={1} px={4}>
+            {navigation.map((item) => (
+              <Link key={item.name} to={item.href} onClick={onToggle}>
+                <Text
+                  w="full"
+                  px={3}
+                  py={2}
+                  rounded="md"
+                  fontSize="md"
+                  fontWeight="medium"
+                  bg={item.current ? "yellow.400" : "transparent"}
+                  color={item.current ? "black" : "gray.300"}
+                  _hover={{
+                    bg: "yellow.50",
+                    color: "black",
+                  }}
                 >
-                  <span className="text-yellow-400">
-                    <img src="/logo.png" alt="Logo" width="70" height="70" />
-                  </span>
-                  <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
-                </Link>
-              </div>
-
-              {/* Desktop Navigation */}
-              <div className="hidden sm:flex sm:space-x-8 sm:items-center">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className={`
-                      relative px-3 py-1 text-sm font-medium transition-all duration-300 rounded-md group
-                      ${
-                        item.current
-                          ? "text-yellow-400"
-                          : "text-white hover:text-yellow-400"
-                      }
-                    `}
-                  >
-                    <span className="relative z-10">{item.name}</span>
-                    {item.current && (
-                      <span className="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-400"></span>
-                    )}
-                  </Link>
-                ))}
-              </div>
-
-              {/* Mobile menu button */}
-              <div className="flex items-center sm:hidden">
-                <Disclosure.Button className="p-2 rounded-md text-gray-300 hover:text-yellow-400 hover:bg-gray-900 focus:outline-none">
-                  {open ? (
-                    <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-                  ) : (
-                    <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                  )}
-                </Disclosure.Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Mobile menu panel */}
-          <Transition
-            enter="transition duration-100 ease-out"
-            enterFrom="transform scale-95 opacity-0"
-            enterTo="transform scale-100 opacity-100"
-            leave="transition duration-75 ease-out"
-            leaveFrom="transform scale-100 opacity-100"
-            leaveTo="transform scale-95 opacity-0"
-          >
-            <Disclosure.Panel className="sm:hidden bg-gray-900">
-              <div className="space-y-1 px-4 py-3">
-                {navigation.map((item) => (
-                  <Disclosure.Button
-                    key={item.name}
-                    as={Link}
-                    to={item.href}
-                    className={`
-                      block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200
-                      ${
-                        item.current
-                          ? "bg-yellow-400 text-black"
-                          : "text-gray-300 hover:bg-yellow-50 hover:text-black"
-                      }
-                    `}
-                  >
-                    {item.name}
-                  </Disclosure.Button>
-                ))}
-              </div>
-            </Disclosure.Panel>
-          </Transition>
-        </>
-      )}
-    </Disclosure>
+                  {item.name}
+                </Text>
+              </Link>
+            ))}
+          </VStack>
+        </Box>
+      </Collapse>
+    </Box>
   );
 };
 

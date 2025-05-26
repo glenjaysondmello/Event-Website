@@ -28,7 +28,6 @@ const VideoSection = () => {
 
 export default VideoSection;
 
-// import React from "react";
 // import { Box, Heading, SimpleGrid } from "@chakra-ui/react";
 
 // const videos = [

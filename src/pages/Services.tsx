@@ -1,5 +1,3 @@
-// ServicesSection.jsx
-import React from "react";
 import { Box, SimpleGrid, Icon, Text, Heading, VStack } from "@chakra-ui/react";
 import { FaTools, FaShieldAlt, FaRocket, FaUsers } from "react-icons/fa";
 
@@ -28,7 +26,7 @@ const services = [
 
 const Services = () => {
   return (
-    <Box px={4} py={10} maxW="7xl" mx="auto">
+    <Box px={4} py={10} maxW="7xl" mx="auto" marginTop={10}>
       <Heading as="h2" size="xl" mb={8} textAlign="center">
         Our Services
       </Heading>

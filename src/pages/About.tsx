@@ -5,7 +5,7 @@ import VideoSection from "../components/VideoSection";
 const About = () => {
   return (
     <>
-      <Box maxW="6xl" mx="auto" px={4} py={10}>
+      <Box maxW="6xl" mx="auto" px={4} py={10} marginTop={10}>
         <Heading as="h2" size="xl" mb={4}>
           About Us
         </Heading>
