@@ -1,82 +1,265 @@
-import { Box, Image, IconButton } from "@chakra-ui/react";
-import { useState } from "react";
-import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Image,
+  IconButton,
+  Text,
+  Flex,
+  HStack,
+  useBoolean,
+} from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
+import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
 
 const images = [
-  "https://www.bing.com/th/id/OIP.0GmahDEIb8q6IoUY9hc5kQHaE7?w=244&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2",
-  "https://www.bing.com/th/id/OIP.F1Ass4uhEfOmT6w-JP4t7wHaE7?w=246&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2",
-  "https://www.bing.com/th/id/OIP.zPBeO44D6CI0xKl9bEdGlwHaE7?w=244&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2",
-  "https://www.bing.com/th/id/OIP.1XerdekxkrB8LZ0F7PEmMgHaEK?w=245&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2",
-  "https://www.bing.com/th/id/OIP.9c4_ncoq7i5KIRzo0t2WXgHaE8?w=245&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2",
-  "https://www.bing.com/th/id/OIP.EAl9jO7qQ00twet6ht052wHaDY?w=244&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2",
+  {
+    url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?...",
+    title: "Mountain Landscape",
+    description: "Breathtaking mountain vista at golden hour",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?...",
+    title: "Forest Path",
+    description: "Serene woodland trail leading into mystery",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?...",
+    title: "Ocean Waves",
+    description: "Powerful waves crashing against rocky shores",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?...",
+    title: "Desert Dunes",
+    description: "Endless golden sand dunes under starlit sky",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?...",
+    title: "Lake Reflection",
+    description: "Perfect mirror reflection on pristine lake",
+  },
 ];
 
-const Carousel3D = () => {
-  const [current, setCurrent] = useState(0);
-  const radius = 250;
-  const imageCount = images.length;
+const progressKeyframes = keyframes`
+  0% { width: 0% }
+  100% { width: 100% }
+`;
 
-  const nextImage = () => {
-    setCurrent((prev) => (prev + 1) % imageCount);
+const ImageCarousel = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useBoolean(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const nextSlide = useCallback(() => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+      setIsTransitioning(false);
+    }, 150);
+  }, [isTransitioning]);
+
+  const prevSlide = useCallback(() => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+      setIsTransitioning(false);
+    }, 150);
+  }, [isTransitioning]);
+
+  const goToSlide = (index: number) => {
+    if (isTransitioning || index === currentIndex) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex(index);
+      setIsTransitioning(false);
+    }, 150);
   };
 
-  const prevImage = () => {
-    setCurrent((prev) => (prev - 1 + imageCount) % imageCount);
-  };
+  useEffect(() => {
+    if (!isPlaying) return;
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isPlaying, nextSlide]);
 
   return (
-    <Box position="relative" w="full" h="500px" overflow="hidden">
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100%",
-          position: "relative",
-          transformStyle: "preserve-3d",
-          perspective: "1000px",
-        }}
-      >
-        {images.map((src, index) => {
-          const angle = (360 / imageCount) * (index - current);
-          return (
-            <Image
-              key={index}
-              src={src}
-              alt={`Image ${index + 1}`}
-              position="absolute"
-              transform={`rotateY(${angle}deg) translateZ(${radius}px)`}
-              transition="transform 0.5s ease"
-              boxShadow="lg"
-              borderRadius="md"
-              w="200px"
-              h="300px"
-              objectFit="cover"
-            />
-          );
-        })}
+    <Box pos="relative" w="full" h="100vh" bg="black" overflow="hidden">
+      {/* Main Image Layer */}
+      {images.map((img, idx) => (
+        <Box
+          key={idx}
+          pos="absolute"
+          inset={0}
+          transition="all 1s ease-in-out"
+          opacity={idx === currentIndex ? 1 : 0}
+          transform={idx === currentIndex ? "scale(1)" : "scale(1.05)"}
+          zIndex={idx === currentIndex ? 10 : 0}
+        >
+          <Image
+            src={img.url}
+            alt={img.title}
+            objectFit="cover"
+            w="full"
+            h="full"
+          />
+          <Box
+            pos="absolute"
+            inset={0}
+            bgGradient="linear(to-t, blackAlpha.700, transparent, blackAlpha.300)"
+          />
+        </Box>
+      ))}
+
+      {/* Loading Spinner */}
+      {isTransitioning && (
+        <Flex
+          pos="absolute"
+          inset={0}
+          zIndex={20}
+          align="center"
+          justify="center"
+          bg="blackAlpha.400"
+        >
+          <Box
+            w="32px"
+            h="32px"
+            border="2px solid"
+            borderColor="whiteAlpha.300"
+            borderTopColor="white"
+            borderRadius="full"
+            animation="spin 1s linear infinite"
+          />
+        </Flex>
+      )}
+
+      {/* Navigation */}
+      <IconButton
+        icon={<ChevronLeft />}
+        onClick={prevSlide}
+        pos="absolute"
+        left={6}
+        top="50%"
+        transform="translateY(-50%)"
+        zIndex={30}
+        bg="whiteAlpha.100"
+        color="white"
+        border="1px solid"
+        borderColor="whiteAlpha.300"
+        isDisabled={isTransitioning}
+        aria-label="Previous"
+        _hover={{ bg: "whiteAlpha.300", transform: "scale(1.1)" }}
+        _active={{ transform: "scale(0.95)" }}
+      />
+      <IconButton
+        icon={<ChevronRight />}
+        onClick={nextSlide}
+        pos="absolute"
+        right={6}
+        top="50%"
+        transform="translateY(-50%)"
+        zIndex={30}
+        bg="whiteAlpha.100"
+        color="white"
+        border="1px solid"
+        borderColor="whiteAlpha.300"
+        isDisabled={isTransitioning}
+        aria-label="Next"
+        _hover={{ bg: "whiteAlpha.300", transform: "scale(1.1)" }}
+        _active={{ transform: "scale(0.95)" }}
+      />
+
+      {/* Play/Pause */}
+      <IconButton
+        icon={isPlaying ? <Pause /> : <Play />}
+        onClick={setIsPlaying.toggle}
+        pos="absolute"
+        top={6}
+        right={6}
+        zIndex={30}
+        bg="whiteAlpha.100"
+        color="white"
+        border="1px solid"
+        borderColor="whiteAlpha.300"
+        aria-label="Toggle play"
+        _hover={{ bg: "whiteAlpha.300", transform: "scale(1.1)" }}
+        _active={{ transform: "scale(0.95)" }}
+      />
+
+      {/* Title & Description */}
+      <Box pos="absolute" bottom={20} left={6} right={6} zIndex={30}>
+        <Box
+          bg="blackAlpha.600"
+          border="1px solid"
+          borderColor="whiteAlpha.300"
+          borderRadius="2xl"
+          p={6}
+        >
+          <Text fontSize="3xl" fontWeight="bold" color="white" mb={2}>
+            {images[currentIndex].title}
+          </Text>
+          <Text fontSize="lg" color="whiteAlpha.900">
+            {images[currentIndex].description}
+          </Text>
+        </Box>
       </Box>
 
-      <IconButton
-        icon={<ArrowBackIcon />}
-        position="absolute"
-        top="50%"
-        left="5"
-        transform="translateY(-50%)"
-        onClick={prevImage}
-        aria-label="Previous"
-      />
-      <IconButton
-        icon={<ArrowForwardIcon />}
-        position="absolute"
-        top="50%"
-        right="5"
-        transform="translateY(-50%)"
-        onClick={nextImage}
-        aria-label="Next"
-      />
+      {/* Dots */}
+      <HStack
+        pos="absolute"
+        bottom={6}
+        left="50%"
+        transform="translateX(-50%)"
+        zIndex={30}
+        spacing={3}
+      >
+        {images.map((_, index) => (
+          <Box
+            key={index}
+            w="12px"
+            h="12px"
+            borderRadius="full"
+            bg={index === currentIndex ? "white" : "whiteAlpha.500"}
+            cursor="pointer"
+            onClick={() => goToSlide(index)}
+            pos="relative"
+            _hover={{ transform: "scale(1.2)", bg: "whiteAlpha.700" }}
+          >
+            {index === currentIndex && (
+              <Box
+                pos="absolute"
+                inset={0}
+                borderRadius="full"
+                bg="white"
+                opacity={0.2}
+                animation="pulse 1.5s infinite"
+              />
+            )}
+          </Box>
+        ))}
+      </HStack>
+
+      {/* Progress Bar */}
+      {isPlaying && (
+        <Box
+          pos="absolute"
+          top={0}
+          left={0}
+          w="full"
+          h="1"
+          bg="whiteAlpha.300"
+          zIndex={30}
+        >
+          <Box
+            h="full"
+            bgGradient="linear(to-r, blue.400, purple.500)"
+            animation={`${progressKeyframes} 3s linear infinite`}
+          />
+        </Box>
+      )}
     </Box>
   );
 };
 
-export default Carousel3D;
+export default ImageCarousel;
