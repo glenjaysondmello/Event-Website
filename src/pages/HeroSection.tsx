@@ -7,9 +7,9 @@ import {
   Container,
 } from "@chakra-ui/react";
 import VideoGallery from "../components/VideoGallary";
-import Carousel3D from "../components/Carousel3D";
 import Footer from "../components/Footer";
-import ImageCarousel from "../components/ImageCarousel";
+import CircularGallery from "../ui/blocks/Components/CircularGallery/CircularGallery";
+// import ImageCarousel from "../components/ImageCarousel";
 
 const HeroSection = () => {
   return (
@@ -68,8 +68,10 @@ const HeroSection = () => {
           </VStack>
         </Container>
       </Box>
-      {/* <Carousel3D /> */}
-      <ImageCarousel />
+      <Box height="600px" position="relative">
+        <CircularGallery bend={3} textColor="#ffffff" borderRadius={0.05} />
+      </Box>
+
       <VideoGallery />
       <Footer />
     </Box>
